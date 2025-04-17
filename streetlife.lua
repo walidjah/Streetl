@@ -755,21 +755,13 @@ local function ToggleESP()
         if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
             local distance = (player.Character.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude
             if distance <= ESPDistance then
-                linesToRemove[p.Name] = DrawSkeleton(p.Character)
-            end
-        end
-    end
-    ESPEnabled = not ESPEnabled
-    for _, lines in pairs(linesToRemove) do
-        for _, line in pairs(lines) do
-            line.Visible = ESPEnabled
-   -- Load Rayfield UI Library
+-- Load Rayfield UI Library
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 -- Create a window for your UI
 local Window = Rayfield:CreateWindow({
    Name = "Streetlife", -- Name of your UI
-   Icon = 0, -- No icon
+   Icon = nil, -- No icon
    LoadingTitle = "LAJ Hub", -- Loading title
    LoadingSubtitle = "by libyaarmy", -- Subtitle
    Theme = "Default", -- UI Theme
@@ -802,7 +794,7 @@ local CombatTab = Window:CreateTab("Combat", 4483362458) -- Combat Tab
 local MiscTab = Window:CreateTab("Misc", 4483362458) -- Misc Tab
 local PlayerTab = Window:CreateTab("Player", 4483362458) -- Player Tab
 
--- Safe Teleport function to avoid issues with instant movement
+-- Safe Teleport function
 local TweenService = game:GetService("TweenService")
 local function SafeTeleport(position)
    local char = game.Players.LocalPlayer.Character
@@ -856,65 +848,6 @@ PlayerTab:CreateSlider({
       if hum then
          hum.WalkSpeed = Value
       end
-   end,
-})
-
--- ESP (Skeleton) Toggle
-local ESPEnabled = false
-local ESPDistance = 100
-
-local function DrawSkeleton(character)
-    if not character or not character:FindFirstChild("HumanoidRootPart") then return end
-    local head = character:FindFirstChild("Head")
-    local hrp = character:FindFirstChild("HumanoidRootPart")
-    local leftArm = character:FindFirstChild("LeftUpperArm")
-    local rightArm = character:FindFirstChild("RightUpperArm")
-    if head and hrp and leftArm and rightArm then
-        local function CreateLine(from, to)
-            local line = Instance.new("LineHandleAdornment")
-            line.Parent = game.Workspace
-            line.Adornee = game.Workspace
-            line.Length = (from.Position - to.Position).Magnitude
-            line.CFrame = CFrame.new((from.Position + to.Position) / 2, to.Position)
-            line.Color3 = Color3.fromRGB(255, 0, 0)
-            line.Thickness = 0.1
-            line.ZIndex = 10
-            line.Visible = ESPEnabled
-            return line
-        end
-        return {
-            CreateLine(head, hrp),
-            CreateLine(leftArm, hrp),
-            CreateLine(rightArm, hrp)
-        }
-    end
-end
-
-local function ToggleESP()
-    local player = game.Players.LocalPlayer
-    local linesToRemove = {}
-    for _, p in pairs(game.Players:GetPlayers()) do
-        if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-            local distance = (player.Character.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude
-            if distance <= ESPDistance then
-                linesToRemove[p.Name] = DrawSkeleton(p.Character)
-            end
-        end
-    end
-    ESPEnabled = not ESPEnabled
-    for _, lines in pairs(linesToRemove) do
-        for _, line in pairs(lines) do
-            line.Visible = ESPEnabled
-        end
-    end
-end
-
--- Add ESP Button
-local ESPEntityTab = Window:CreateTab("ESP", 4483362458)
-ESPEntityTab:CreateButton({
-   Name = "Toggle Skeleton ESP",
-   Callback = function()
-      ToggleESP()
    end,
 })
 
